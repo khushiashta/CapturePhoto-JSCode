@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Webcam Capture</title>
+</head>
+<body>
+    <h1>Webcam Capture</h1>
+    <video id="webcam" autoplay></video>
+    <button id="capture">Capture Photo</button>
+    <img id="photo" src="#" alt="Captured Photo" />
+
+    <script>
+        const webcamElement = document.getElementById('webcam');
+        const captureButton = document.getElementById('capture');
+        const photoElement = document.getElementById('photo');
+
+        // Access the user's webcam
+        async function setupWebcam() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                webcamElement.srcObject = stream;
+            }
+        }
+
+        // Capture a photo from the webcam
+        function capturePhoto() {
+            const context = canvas.getContext('2d');
+            context.drawImage(webcamElement, 0, 0, canvas.width, canvas.height);
+
+            // Get the data URL of the captured photo
+            const dataURL = canvas.toDataURL('image/jpeg');
+
+            // Display the captured photo
+            photoElement.src = dataURL;
+
+            // Uncomment the following lines to save the photo locally
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'captured-photo.jpg';
+            link.click();
+
+            // Uncomment the following lines to upload the photo to a server
+            // const formData = new FormData();
+            // formData.append('photo', dataURL);
+            // fetch('https://example.com/upload', {
+            //     method: 'POST',
+            //     body: formData
+            // });
+        }
+
+        setupWebcam();
+
+        captureButton.addEventListener('click', () => {
+            capturePhoto();
+        });
+    </script>
+</body>
+</html>
